@@ -1,16 +1,15 @@
 import React from "react";
 
+
 export const Tile = (props) => {
-  const {contacts} = props;
+  const {tile} = props;
   return (
     <div className="tile-container">
-      {contacts.map((item, idx) => {
-          return <div key={idx}>
-            <p className="tile-title">{item.currentName}</p>
-            <p className="tile">{item.phone}</p>
-            <p>{item.email}</p>
-            </div>
-        })}
+      {Object.values(tile).map((value, index) => (
+        <p key={index} className={`${index === 0 ? "tile-title" : ""} tile`}>
+          {value}
+        </p>
+      ))}
     </div>
   );
 };

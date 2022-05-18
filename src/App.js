@@ -9,14 +9,8 @@ function App() {
   Define state variables for 
   contacts and appointments 
   */
-  const [currentName, setCurrentName] = useState('')
-  const [phone, setPhone] = useState('');
-  const [email, setEmail] = useState('');
+  const [appointments, setAppointments] = useState([])
   const [contacts, setContacts] = useState([]);
-  const [currentTitle, setCurrentTitle] = useState('');
-  const [contact, setContact] = useState('');
-  const [date, setDate] = useState('');
-  const [time, setTime] = useState('');
 
   const ROUTES = {
     CONTACTS: "/contacts",
@@ -28,36 +22,27 @@ function App() {
   contacts and appointments
   */
 
-  const onSubmitContact = (e) => {
-    e.preventDefault();
-
-    const contactName = contacts.map((item) => item.currentName)
-
-    const names = contactName.some(name => name === currentName)
-    
-    if (names) {
-      return
-    }
-    setContacts((item) => [...item, {
-      currentName: currentName,
-      email: email,
-      phone: phone
-    }]
-    )
-    setCurrentName('')
+  const addContact = (name, phone, email) => {
+    setContacts([
+      ...contacts, {
+        name: name,
+        phone: phone,
+        email: email
+      }
+    ])
   }
 
-  const onChangeHandlerForCurrentName = (e) => {
-    setCurrentName(e.target.value)
+  const addAppointment = (title, contact, date, time) => {
+    setAppointments([
+      ...appointments, {
+        title: title,
+        contact: contact,
+        date: date,
+        time: time
+      }
+    ])
   }
 
-  const onChangeHandlerForEmail = (e) => {
-    setEmail(e.target.value)
-  }
-
-  const onChangeHandlerForPhone = (e) => {
-    setPhone(e.target.value)
-  }
 
   return (
     <>
@@ -76,11 +61,11 @@ function App() {
           </Route>
           <Route path={ROUTES.CONTACTS}>
             {/* Add props to ContactsPage */}
-            <ContactsPage contacts={contacts} onSubmitContact={onSubmitContact} setCurrentName={setCurrentName} onChangeHandlerForCurrentName={onChangeHandlerForCurrentName} onChangeHandlerForEmail={onChangeHandlerForEmail} onChangeHandlerForPhone={onChangeHandlerForPhone} />
+            <ContactsPage  contacts={contacts} addContact={addContact}/>
           </Route>
           <Route path={ROUTES.APPOINTMENTS}>
             {/* Add props to AppointmentsPage */}
-            <AppointmentsPage />
+            <AppointmentsPage  appointments={appointments} addAppointment={addAppointment} contacts={contacts}/>
           </Route>
         </Switch>
       </main>

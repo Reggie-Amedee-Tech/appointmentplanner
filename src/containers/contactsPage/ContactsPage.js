@@ -1,21 +1,37 @@
-import React, {useEffect} from "react";
+import React, { useEffect, useState } from "react";
 import TileList from "../../components/tileList/TileList";
+import ContactForm from "../../components/contactForm/ContactForm";
 
 export const ContactsPage = (props) => {
+
+  const { contacts, addContact } = props;
   /*
   Define state variables for 
   contact info and duplicate check
   */
-  const { onSubmitContact, contacts, setCurrentName, onChangeHandlerForCurrentName, onChangeHandlerForEmail, onChangeHandlerForPhone } = props;
 
-  
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
+  const [duplicate, setDuplicate] = useState(false)
+
+
+  const contactName = contacts.map((item) => item.name)
+
+  const names = contactName.some(item => item === name)
+
+  console.log(contactName)
+  console.log(names)
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    /*
-    Add contact info and clear data
-    if the contact name is not a duplicate
-    */
+    if (names) {
+      return
+    }
+    addContact(name, email, phone);
+    setName('');
+    setEmail('');
+    setPhone('');
   };
 
   /*
@@ -23,40 +39,27 @@ export const ContactsPage = (props) => {
   contacts array variable in props
   */
 
+  
+
+
   return (
     <div>
       <section>
-        <h2>Add Contact</h2> 
-        <form onSubmit={onSubmitContact}>
-          <input
-          type='text'
-          value={contacts.currentName}
-          onChange={onChangeHandlerForCurrentName}
-          placeholder="please input your name"
-          >
-          </input>
-          <input
-          type='text'
-          value={contacts.email}
-          onChange={onChangeHandlerForEmail}
-          placeholder="please input your email"
-          >
-          </input>
-          <input
-          type='text'
-          value={contacts.phone}
-          onChange={onChangeHandlerForPhone}
-          placeholder="please input your phone number"
-          >
-          </input>
-          <button type="submit">Submit</button>
-        </form>
+        <h2>Add Contact</h2>
+        <ContactForm 
+        name={name}
+        setName={setName}
+        phone={phone}
+        setPhone={setPhone}
+        email={email}
+        setEmail={setEmail}
+        handleSubmit={handleSubmit}/>
       </section>
       <hr />
       <section>
         <h2>Contacts</h2>
-        <TileList contacts={contacts} />
-        
+        <TileList tiles={contacts}/>
+
       </section>
     </div>
   );
